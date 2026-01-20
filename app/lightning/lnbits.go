@@ -29,12 +29,12 @@ func FetchBalance() (int, error) {
 	defer resp.Body.Close()
 
 	var data struct {
-		Balance int `json:"balance"` // LNbits returns msats
+		Balance int `json:"balance"` // LNbits returns sats
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
 		return 0, err
 	}
-	return data.Balance / 1000, nil
+	return data.Balance, nil
 }
 
 func PayInvoice(bolt11 string) (string, error) {
