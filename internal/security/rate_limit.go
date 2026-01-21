@@ -3,7 +3,7 @@ package security
 import (
 	"sync"
 	"time"
-	"faucet/app/config"
+	"faucet/internal/configs"
 )
 
 type RateLimiter struct {
@@ -26,7 +26,7 @@ func (rl *RateLimiter) IsAllowed(ip string) (bool, time.Duration) {
 	rl.mu.RUnlock()
 
 	if exists {
-		window := time.Duration(config.RateLimitWindow) * time.Second
+		window := time.Duration(configs.RateLimitWindow) * time.Second
 		elapsed := time.Since(lastClaim)
 		if elapsed < window {
 			return false, window - elapsed
@@ -46,7 +46,7 @@ func (rl *RateLimiter) cleanup() {
 	for range ticker.C {
 		rl.mu.Lock()
 		for ip, lastClaim := range rl.claims {
-			if time.Since(lastClaim).Seconds() > float64(config.RateLimitWindow) {
+			if time.Since(lastClaim).Seconds() > float64(configs.RateLimitWindow) {
 				delete(rl.claims, ip)
 			}
 		}

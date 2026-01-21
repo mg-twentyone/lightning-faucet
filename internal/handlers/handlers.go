@@ -4,17 +4,17 @@ import (
 	"fmt"
 	"log"
 
-	"faucet/app/config"
-	"faucet/app/lightning"
-	"faucet/app/security"
+	"faucet/internal/configs"
+	"faucet/internal/lightning"
+	"faucet/internal/security"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func HandleIndex(c *fiber.Ctx) error {
 	return c.Render("index", fiber.Map{
-		"site_key":   config.SiteKey,
-		"max_amount": config.MaxClaimAmount,
+		"site_key":   configs.SiteKey,
+		"max_amount": configs.MaxClaimAmount,
 	})
 }
 
@@ -46,9 +46,9 @@ func HandleClaim(c *fiber.Ctx, tracker *security.RateLimiter) error {
 	amounts, err := lightning.GetLNInvoiceAmount(payload.Invoice)
 	fmt.Printf("Amounts obj: %+v\n", amounts)
 
-	if err != nil || amounts.Sats > config.MaxClaimAmount || amounts.Sats < 1 {
+	if err != nil || amounts.Sats > configs.MaxClaimAmount || amounts.Sats < 1 {
 		return c.Status(400).JSON(fiber.Map{
-			"detail": fmt.Sprintf("Invalid amount. Max is %d sats.", config.MaxClaimAmount),
+			"detail": fmt.Sprintf("Invalid amount. Max is %d sats.", configs.MaxClaimAmount),
 		})
 	}
 

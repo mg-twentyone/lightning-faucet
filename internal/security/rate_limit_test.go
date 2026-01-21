@@ -5,12 +5,12 @@ import (
 	"sync"
 	"testing"
 	"time"
-	"faucet/app/config"
+	"faucet/internal/configs"
 )
 
 // test rate limiter business logic
 func TestRateLimiter(t *testing.T) {
-	config.RateLimitWindow = 1 // 1 second 
+	configs.RateLimitWindow = 1 // 1 second 
 	rl := NewRateLimiter()
 	ip := "192.168.1.1"
 

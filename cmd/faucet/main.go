@@ -4,9 +4,9 @@ import (
 	"log"
 	"time"
 
-	"faucet/app/config"
-	"faucet/app/handlers"
-	"faucet/app/security"
+	"faucet/internal/configs"
+	"faucet/internal/handlers"
+	"faucet/internal/security"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
@@ -15,12 +15,12 @@ import (
 )
 
 func main() {
-	config.LoadConfig()
+	configs.LoadConfig()
 
 	// initialize security services
 	claimTracker := security.NewRateLimiter()
 
-	engine := html.New("app/templates", ".html")
+	engine := html.New("./web/templates", ".html")
 	engine.Delims("[[", "]]")
 
 	// initialize Fiber app (express-inspired web framework)
@@ -51,6 +51,6 @@ func main() {
 	})
 
 	// server start (for docker)
-	log.Printf("⚡ Faucet starting on :8000 (Max Claim: %d sats)", config.MaxClaimAmount)
+	log.Printf("⚡ Faucet starting on :8000 (Max Claim: %d sats)", configs.MaxClaimAmount)
 	log.Fatal(app.Listen("0.0.0.0:8000"))
 }

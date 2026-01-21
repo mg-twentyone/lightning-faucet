@@ -8,7 +8,7 @@ import (
 	"time"
 	"strings"
 	"strconv"
-	"faucet/app/config"
+	"faucet/internal/configs"
 )
 
 type Amount struct {
@@ -19,8 +19,8 @@ type Amount struct {
 
 func FetchBalance() (int, error) {
 	client := &http.Client{Timeout: 5 * time.Second}
-	req, _ := http.NewRequest("GET", config.LnbitsUrl+"/api/v1/wallet", nil)
-	req.Header.Set("X-Api-Key", config.LnbitsKey)
+	req, _ := http.NewRequest("GET", configs.LnbitsUrl+"/api/v1/wallet", nil)
+	req.Header.Set("X-Api-Key", configs.LnbitsKey)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -44,8 +44,8 @@ func PayInvoice(bolt11 string) (string, error) {
 	})
 
 	client := &http.Client{Timeout: 15 * time.Second}
-	req, _ := http.NewRequest("POST", config.LnbitsUrl+"/api/v1/payments", bytes.NewBuffer(body))
-	req.Header.Set("X-Api-Key", config.LnbitsKey)
+	req, _ := http.NewRequest("POST", configs.LnbitsUrl+"/api/v1/payments", bytes.NewBuffer(body))
+	req.Header.Set("X-Api-Key", configs.LnbitsKey)
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := client.Do(req)
@@ -76,8 +76,8 @@ func CreateWithdrawLink(minAmount, maxAmount int) (string, error) {
 	})
 
 	client := &http.Client{Timeout: 10 * time.Second}
-	req, _ := http.NewRequest("POST", config.LnbitsUrl+"/withdraw/api/v1/links", bytes.NewBuffer(body))
-	req.Header.Set("X-Api-Key", config.LnbitsKey)
+	req, _ := http.NewRequest("POST", configs.LnbitsUrl+"/withdraw/api/v1/links", bytes.NewBuffer(body))
+	req.Header.Set("X-Api-Key", configs.LnbitsKey)
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := client.Do(req)

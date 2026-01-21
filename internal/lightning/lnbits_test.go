@@ -2,7 +2,7 @@ package lightning
 
 import (
 	"encoding/json"
-	"faucet/app/config"
+	"faucet/internal/configs"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -23,8 +23,8 @@ func TestFetchBalance(t *testing.T) {
 	defer server.Close()
 
 	// mocked server config
-	config.LnbitsUrl = server.URL
-	config.LnbitsKey = testApiKey
+	configs.LnbitsUrl = server.URL
+	configs.LnbitsKey = testApiKey
 
 	balance, err := FetchBalance()
 

@@ -2,7 +2,7 @@ package security
 
 import (
 	"encoding/json"
-	"faucet/app/config"
+	"faucet/internal/configs"
 	"net/http"
 	"net/url"
 	"time"
@@ -11,7 +11,7 @@ import (
 func VerifyTurnstile(token, ip string) bool {
 	client := &http.Client{Timeout: 5 * time.Second}
 	data := url.Values{
-		"secret":   {config.TurnstileSecret},
+		"secret":   {configs.TurnstileSecret},
 		"response": {token},
 		"remoteip": {ip},
 	}
